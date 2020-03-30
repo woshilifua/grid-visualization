@@ -11,16 +11,17 @@ import {
   MAPCONFIG,
   DISTRICTSTYLE,
   POLYGONSTYLE,
-  SCENES
+  SCENES,
+  POLYGONTEXTSTYLE
 } from '@/config/map'
-import { path } from '@/data/jinan/polygon'
-import { markers } from '@/data/jinan/markers'
-import { polygonValues } from '@/data/jinan/polygon-values'
+import { path } from '@/data/hangzhou/polygon'
+import { markers } from '@/data/hangzhou/markers'
+import { polygonValues } from '@/data/hangzhou/polygon-values'
 export default {
   data() {
     return {
       map: null,
-      region: region.jinan
+      region: region.hangzhou
     }
   },
 
@@ -52,45 +53,38 @@ export default {
       })
     },
 
-    // getCenter(arr) {
-    //   var minX, maxX, minY, maxY
-    //   for (var i = 0; i < arr.length; i++) {
-    //     let arr0 = arr[i].split(',')[0]
-    //     let arr1 = arr[i].split(',')[1]
-    //     minX = arr[i][0] < minX || minX == null ? arr[i][0] : minX
-    //     maxX = arr[i][0] > maxX || maxX == null ? arr[i][0] : maxX
-    //     minY = arr[i][1] < minY || minY == null ? arr[i][1] : minY
-    //     maxY = arr[i][1] > maxY || maxY == null ? arr[i][1] : maxY
-    //   }
-    //   return [(minX + maxX) / 2, (minY + maxY) / 2]
-    // },
+    getCenter(path) {
+      var x = 0.0
+      var y = 0.0
+      for (var i = 0; i < path.length; i++) {
+        let lng = path[i].split(',')[0]
+        let lat = path[i].split(',')[1]
+        x = x + parseFloat(lng)
+        y = y + parseFloat(lat)
+      }
+      x = x / path.length
+      y = y / path.length
+      return [x, y]
+    },
 
     setPolygonText(key, center) {
-      console.log(center)
       // 创建纯文本标记
       if (!polygonValues[key]) return
       var text = new AMap.Text({
         text: `建筑数量: ${polygonValues[key][0]}<br> 客户数量: ${polygonValues[key][1]}`,
+        zooms: [12, 16],
         anchor: 'center',
         draggable: true,
         cursor: 'pointer',
-        style: {
-          padding: '0.3rem',
-          'margin-bottom': '1rem',
-          'background-color': 'white',
-          'border-width': 0,
-          'box-shadow': '0 2px 6px 0 rgba(114, 124, 245, .5)',
-          'text-align': 'center',
-          'font-size': '12px',
-          color: 'blue'
-        },
-        position: [lng, lat]
+        style: POLYGONTEXTSTYLE,
+        position: center
       })
       text.setMap(this.map)
     },
 
     setCustomizeDistrict() {
       let polygons = []
+
       Object.keys(path).forEach(key => {
         let list = []
         path[key].split(';').forEach((subItemOne, subIndex) => {
@@ -102,8 +96,8 @@ export default {
           }
           list.push(new AMap.LngLat(lng, lat))
           if (subIndex === 0) {
-            // let center = this.getCenter(path[key].split(';'))
-            // this.setPolygonText(key, center)
+            let center = this.getCenter(path[key].split(';'))
+            this.setPolygonText(key, center)
           }
         })
         let polygon = new AMap.Polygon(

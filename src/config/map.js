@@ -1,7 +1,7 @@
 /* eslint-disable no-undef */
 
 export const MAPCONFIG = {
-  mapStyle: 'amap://styles/normal',
+  mapStyle: 'amap://styles/fresh',
   zoom: 9,
   depth: 1,
   resizeEnable: false,
@@ -10,9 +10,9 @@ export const MAPCONFIG = {
 }
 
 export const DISTRICTSTYLE = {
-  fill: 'rgb(166, 189, 219)',
-  'fill-opacity': '0.3',
-  'province-stroke': 'cornflowerblue',
+  fill: '#446b8c',
+  'fill-opacity': .8,
+  'province-stroke': '#0570b0',
   'city-stroke': 'white',
   'county-stroke': 'rgba(255,255,255,0.5)'
 }
@@ -25,8 +25,9 @@ export const MAPURLS = {
 export const POLYGONSTYLE = {
   path: [],
   strokeStyle: 'solid',
-  fillColor: '#0570b0', // 多边形填充颜色
-  strokeWeight: 2, // 线条宽度，默认为 1
+  fillColor: '#87c5cb', // 多边形填充颜色
+  fillOpacity: .8,
+  strokeWeight: 1, // 线条宽度，默认为 1
   strokeColor: 'white' // 线条颜色
 }
 
@@ -43,4 +44,15 @@ export const SCENES = {
   '专业市场': {
     styleKey: 3
   }
+}
+
+export const POLYGONTEXTSTYLE = {
+  padding: '0.3rem',
+  'margin-bottom': '1rem',
+  'background-color': 'white',
+  'border-width': 0,
+  'box-shadow': '0 2px 6px 0 rgba(114, 124, 245, .5)',
+  'text-align': 'center',
+  'font-size': '12px',
+  color: 'blue'
 }
