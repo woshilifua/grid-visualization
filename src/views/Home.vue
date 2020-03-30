@@ -1,18 +1,30 @@
+/* eslint-disable no-undef */
 <template>
   <div class="home">
-    <img alt="Vue logo" src="../assets/logo.png" />
-    <HelloWorld msg="Welcome to Your Vue.js App" />
+    <Map />
+    <CheckBox class="check-box" />
   </div>
 </template>
 
 <script>
-// @ is an alias to /src
-import HelloWorld from "@/components/HelloWorld.vue";
+import Map from './components/map'
+import CheckBox from './components/checkbox'
 
 export default {
-  name: "Home",
   components: {
-    HelloWorld
+    Map,
+    CheckBox
   }
-};
+}
 </script>
+<style scoped>
+.home {
+  position: relative;
+}
+.check-box {
+  position: absolute;
+  left: 12px;
+  top: 12px;
+  width: 320px;
+}
+</style>
