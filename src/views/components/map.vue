@@ -14,14 +14,13 @@ import {
   SCENES,
   POLYGONTEXTSTYLE
 } from '@/config/map'
-import { path } from '@/data/hangzhou/polygon'
-import { markers } from '@/data/hangzhou/markers'
-import { polygonValues } from '@/data/hangzhou/polygon-values'
+
 export default {
   data() {
     return {
       map: null,
-      region: region.hangzhou
+      region: region[this.$route.params.city],
+      city: this.$route.params.city
     }
   },
 
@@ -69,63 +68,68 @@ export default {
 
     setPolygonText(key, center) {
       // 创建纯文本标记
-      if (!polygonValues[key]) return
-      var text = new AMap.Text({
-        text: `建筑数量: ${polygonValues[key][0]}<br> 客户数量: ${polygonValues[key][1]}`,
-        zooms: [12, 16],
-        anchor: 'center',
-        draggable: true,
-        cursor: 'pointer',
-        style: POLYGONTEXTSTYLE,
-        position: center
+      import(`@/data/${this.city}/polygon-values`).then(res => {
+        if (!res.polygonValues[key]) return
+        var text = new AMap.Text({
+          text: `建筑数量: ${res.polygonValues[key][0]}<br> 客户数量: ${res.polygonValues[key][1]}`,
+          zooms: [12, 16],
+          anchor: 'center',
+          draggable: true,
+          cursor: 'pointer',
+          style: POLYGONTEXTSTYLE,
+          position: center
+        })
+        text.setMap(this.map)
       })
-      text.setMap(this.map)
     },
 
     setCustomizeDistrict() {
       let polygons = []
-
-      Object.keys(path).forEach(key => {
-        let list = []
-        path[key].split(';').forEach((subItemOne, subIndex) => {
-          let subItems = subItemOne.split(',')
-          let lng = Number(subItems[0])
-          let lat = Number(subItems[1])
-          if (Number.isNaN(lng) || Number.isNaN(lat) || lat < 10) {
-            return
-          }
-          list.push(new AMap.LngLat(lng, lat))
-          if (subIndex === 0) {
-            let center = this.getCenter(path[key].split(';'))
-            this.setPolygonText(key, center)
-          }
+      import(`@/data/${this.city}/polygon`).then(res => {
+        Object.keys(res.path).forEach(key => {
+          let list = []
+          res.path[key].split(';').forEach((subItemOne, subIndex) => {
+            let subItems = subItemOne.split(',')
+            let lng = Number(subItems[0])
+            let lat = Number(subItems[1])
+            if (Number.isNaN(lng) || Number.isNaN(lat) || lat < 10) {
+              return
+            }
+            list.push(new AMap.LngLat(lng, lat))
+            if (subIndex === 0) {
+              let center = this.getCenter(res.path[key].split(';'))
+              this.setPolygonText(key, center)
+            }
+          })
+          let polygon = new AMap.Polygon(
+            Object.assign(POLYGONSTYLE, { path: list })
+          )
+          polygons.push(polygon)
         })
-        let polygon = new AMap.Polygon(
-          Object.assign(POLYGONSTYLE, { path: list })
-        )
-        polygons.push(polygon)
+        let overlayGroups = new AMap.OverlayGroup(polygons)
+        this.map.add(overlayGroups)
       })
-      let overlayGroups = new AMap.OverlayGroup(polygons)
-      this.map.add(overlayGroups)
     },
 
     setMarkers() {
       let markerList = []
-      markers.forEach(item => {
-        if (SCENES[item[0]]) {
-          markerList.push({
-            lnglat: [Number(item[1]), Number(item[2])],
-            style: SCENES[item[0]].styleKey
-          })
-        }
-      })
-      import('@/config/marker-style').then(res => {
-        let massMarks = new AMap.MassMarks(markerList, {
-          zIndex: 111,
-          style: res.default
+      import(`@/data/${this.city}/markers`).then(res => {
+        res.markers.forEach(item => {
+          if (SCENES[item[0]]) {
+            markerList.push({
+              lnglat: [Number(item[1]), Number(item[2])],
+              style: SCENES[item[0]].styleKey
+            })
+          }
         })
-        massMarks.setData(markerList)
-        massMarks.setMap(this.map)
+        import('@/config/marker-style').then(res => {
+          let massMarks = new AMap.MassMarks(markerList, {
+            zIndex: 111,
+            style: res.default
+          })
+          massMarks.setData(markerList)
+          massMarks.setMap(this.map)
+        })
       })
     }
   }

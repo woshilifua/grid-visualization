@@ -1,6 +1,7 @@
 <template>
   <el-card>
-    <div class="list">
+    <div class="list"
+         v-if="count">
       <p>
         <img src="@/assets/pin-1.png" />
         <span>&nbsp;&nbsp;高端聚类: {{count['高端聚类'].value}} 客户数量: {{count['高端聚类'].client}}</span>
@@ -22,13 +23,17 @@
 </template>
 
 <script>
-import { count } from '@/data/jinan/markers'
-
 export default {
   data() {
     return {
-      count: count
+      count: null
     }
+  },
+
+  mounted() {
+    import(`@/data/${this.$route.params.city}/markers`).then(res => {
+      this.count = res.count
+    })
   }
 }
 </script>
