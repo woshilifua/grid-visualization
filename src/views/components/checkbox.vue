@@ -31,9 +31,16 @@ export default {
   },
 
   mounted() {
-    import(`@/data/${this.$route.params.city}/markers`).then(res => {
-      this.count = res.count
-    })
+    if (this.$route.params.district) {
+      import(`@/data/${this.$route.params.city}/polygon`).then(res => {
+        if (this.$route.params.district !== res.polygon.id) return
+        this.count = res.polygon.statistics
+      })
+    } else {
+      import(`@/data/${this.$route.params.city}/markers`).then(res => {
+        this.count = res.count
+      })
+    }
   }
 }
 </script>

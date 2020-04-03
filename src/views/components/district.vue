@@ -52,6 +52,21 @@ export default {
           Object.assign(POLYGONSTYLE, { path: list, fillOpacity: 0.5 })
         )
         this.map.add(polygon)
+        if (res.polygon.relateds) {
+          res.polygon.relateds.forEach(item => {
+            var path = [
+              new AMap.LngLat(item.lng, item.lat),
+              new AMap.LngLat(item.related.lng, item.related.lat)
+            ]
+            let polyline = new AMap.Polyline({
+              path: path,
+              borderWeight: 2,
+              strokeColor: 'white',
+              offset: new AMap.Pixel(-13, -30)
+            })
+            this.map.add(polyline)
+          })
+        }
       })
     },
 
