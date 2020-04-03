@@ -85,7 +85,7 @@ export default {
 
     setCustomizeDistrict() {
       let polygons = []
-      import(`@/data/${this.city}/polygon`).then(res => {
+      import(`@/data/${this.city}/polygons`).then(res => {
         Object.keys(res.path).forEach(key => {
           let list = []
           res.path[key].split(';').forEach((subItemOne, subIndex) => {

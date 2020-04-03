@@ -8,22 +8,36 @@ export default [
   {
     url: pin_0,
     anchor: new AMap.Pixel(16, 16),
-    size: new AMap.Size(12, 12)
+    size: new AMap.Size(16, 16)
   },
   {
     url: pin_1,
     anchor: new AMap.Pixel(16, 16),
-    size: new AMap.Size(12, 12)
+    size: new AMap.Size(16, 16)
   },
   {
     url: pin_2,
     anchor: new AMap.Pixel(16, 16),
-    size: new AMap.Size(12, 12)
+    size: new AMap.Size(16, 16)
   },
   {
     url: pin_3,
     anchor: new AMap.Pixel(16, 16),
-    size: new AMap.Size(12, 12)
-  },
-
+    size: new AMap.Size(16, 16)
+  }
 ]
+
+export const icons = {
+  '高端聚类': {
+    url: pin_0
+  },
+  '园区': {
+    url: pin_1
+  },
+  '写字楼': {
+    url: pin_2
+  },
+  '专业市场': {
+    url: pin_3
+  }
+}

@@ -26,4 +26,12 @@
 #nav a.router-link-exact-active {
   color: #42b983;
 }
+.amap-marker-label {
+  border: none;
+  background: none;
+  color: white;
+  font-size: 10px;
+  font-weight: 500;
+  text-align: center;
+}
 </style>

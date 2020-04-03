@@ -1,18 +1,18 @@
 /* eslint-disable no-undef */
 <template>
   <div class="home">
-    <Map />
+    <District />
     <CheckBox class="check-box" />
   </div>
 </template>
 
 <script>
-import Map from './components/map'
+import District from './components/district'
 import CheckBox from './components/checkbox'
 
 export default {
   components: {
-    Map,
+    District,
     CheckBox
   }
 }
